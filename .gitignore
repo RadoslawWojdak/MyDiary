@@ -328,13 +328,13 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
-/Properties/Settings.settings
-/Properties/Settings.Designer.cs
-/Properties/Resources.resx
-/Properties/Resources.Designer.cs
-/Properties/AssemblyInfo.cs
-/MyDiary.sln
-/MyDiary.csproj
-/App.xaml.cs
-/App.xaml
-/App.config
+/MyDiary/Properties/Settings.settings
+/MyDiary/Properties/Settings.Designer.cs
+/MyDiary/Properties/Resources.resx
+/MyDiary/Properties/Resources.Designer.cs
+/MyDiary/Properties/AssemblyInfo.cs
+/MyDiary/MyDiary.sln
+/MyDiary/MyDiary.csproj
+/MyDiary/App.xaml.cs
+/MyDiary/App.xaml
+/MyDiary/App.config
