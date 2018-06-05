@@ -1,0 +1,23 @@
+﻿<Window x:Class="MyDiary.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyDiary"
+        mc:Ignorable="d"
+        Title="MyDiary" Height="600" Width="811" SizeChanged="Window_SizeChanged" StateChanged="Window_StateChanged" Closed="Window_Closed">
+    <Grid>
+        <Menu x:Name="menu" Width="Auto" Height="18" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <MenuItem x:Name="menuFile" Header="_File">
+                <MenuItem x:Name="menuNewNote" Header="New _Note" Click="menuNewNote_Click"/>
+                <MenuItem x:Name="menuNewDiary" Header="New _Diary" Click="menuNewDiary_Click"/>
+                <MenuItem x:Name="menuExit" Header="E_xit" Click="menuExit_Click"/>
+            </MenuItem>
+            <MenuItem x:Name="menuHelp" Header="_Help">
+                <MenuItem x:Name="menuAbout" Header="_About" Click="menuAbout_Click"/>
+                <MenuItem x:Name="menuVersion" Header="_Version" Click="menuVersion_Click"/>
+            </MenuItem>
+        </Menu>
+
+    </Grid>
+</Window>
