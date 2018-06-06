@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyDiary"
         mc:Ignorable="d"
-        Title="MyDiary" Height="600" Width="811" SizeChanged="Window_SizeChanged" StateChanged="Window_StateChanged" Closed="Window_Closed">
+        Title="MyDiary" Height="600" Width="811" SizeChanged="Window_SizeChanged" StateChanged="Window_StateChanged" Closing="Window_Closing">
     <Grid>
         <Menu x:Name="menu" Width="Auto" Height="18" HorizontalAlignment="Left" VerticalAlignment="Top">
             <MenuItem x:Name="menuFile" Header="_File">
                 <MenuItem x:Name="menuNewNote" Header="New _Note" Click="menuNewNote_Click"/>
                 <MenuItem x:Name="menuNewDiary" Header="New _Diary" Click="menuNewDiary_Click"/>
+                <Separator />
                 <MenuItem x:Name="menuExit" Header="E_xit" Click="menuExit_Click"/>
             </MenuItem>
             <MenuItem x:Name="menuHelp" Header="_Help">
@@ -18,6 +19,5 @@
                 <MenuItem x:Name="menuVersion" Header="_Version" Click="menuVersion_Click"/>
             </MenuItem>
         </Menu>
-
     </Grid>
 </Window>

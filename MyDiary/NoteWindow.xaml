@@ -1,0 +1,24 @@
+﻿<Window x:Class="MyDiary.NoteWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyDiary"
+        mc:Ignorable="d"
+        Title="MyDiary" Height="480" Width="640" SizeChanged="Window_SizeChanged" StateChanged="Window_StateChanged" Closing="Window_Closing">
+    <Grid>
+        <Menu x:Name="menu" Width="Auto" Height="18" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <MenuItem x:Name="menuFile" Header="_File">
+                <MenuItem x:Name="menuSave" Header="_Save" Click="menuSave_Click"/>
+                <MenuItem x:Name="menuLoad" Header="_Load" Click="menuLoad_Click"/>
+                <Separator />
+                <MenuItem x:Name="menuClose" Header="_Close" Click="menuClose_Click"/>
+            </MenuItem>
+        </Menu>
+        <TextBox x:Name="titleTextBox" HorizontalAlignment="Left" Height="23" Margin="36,44,0,0" TextWrapping="Wrap" Text="&lt;Title&gt;" VerticalAlignment="Top" Width="Auto" MaxLines="1" MaxLength="45" ToolTip="Title"/>
+        <TextBox x:Name="noteTextBox" HorizontalAlignment="Center" Height="Auto" Margin="0,67,0,0" TextWrapping="Wrap" Text="&lt;Note&gt;" VerticalAlignment="Top" Width="Auto" VerticalScrollBarVisibility="Auto"/>
+        <Label x:Name="titleLabel" Content="Title:" HorizontalAlignment="Left" Margin="0,44,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="tagsLabel" Content="Tags:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,18,0,0"/>
+        <TextBox x:Name="tagsTextBox" HorizontalAlignment="Left" Height="23" Margin="36,22,0,0" TextWrapping="Wrap" Text="&lt;Tags&gt;" VerticalAlignment="Top" Width="120"/>
+    </Grid>
+</Window>
