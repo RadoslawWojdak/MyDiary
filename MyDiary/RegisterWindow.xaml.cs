@@ -88,6 +88,9 @@ namespace MyDiary
 
                 connection.Close();
 
+                Globals.logged = true;
+                Globals.username = usernameTextBox.Text;
+
                 Close();
             }
         }

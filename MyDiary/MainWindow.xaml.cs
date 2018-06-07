@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace MyDiary
 {
@@ -21,8 +22,10 @@ namespace MyDiary
     public partial class MainWindow : Window
     {
         private enum WinType { WinNote, WinSignIn, WinRegister };
-        private bool _closed;
+
         private Window _signRegWindow;
+        private DispatcherTimer _timer;
+        private bool _closed;
 
         public bool SignRegWindowState
         {
@@ -41,9 +44,26 @@ namespace MyDiary
         {
             InitializeComponent();
 
+            _timer = new DispatcherTimer();
+            _timer.Tick += tick;
+            _timer.Interval = new TimeSpan(0, 0, 1);
+            _timer.Start();
+
             _closed = false;
 
             AdjustControlsParameters(Width, Height);
+        }
+
+        private void tick(object sender, EventArgs e)
+        {
+            if (Globals.logged)
+            {
+                Title = Globals.username + " - MyDiary";
+
+                menuSignIn.IsEnabled = false;
+                menuRegister.IsEnabled = false;
+                menuSignOut.IsEnabled = true;
+            }
         }
 
         //at the beginning "ActualWidth" and "ActualHeight" is equal to 0
@@ -167,6 +187,17 @@ namespace MyDiary
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Close(e);
+        }
+
+        private void menuSignOut_Click(object sender, RoutedEventArgs e)
+        {
+            Globals.logged = false;
+
+            Title = "MyDiary";
+
+            menuSignIn.IsEnabled = true;
+            menuRegister.IsEnabled = true;
+            menuSignOut.IsEnabled = false;
         }
     }
 }

@@ -52,7 +52,11 @@ namespace MyDiary
             connection.Close();
 
             if (signed)
+            {
+                Globals.logged = true;
+                Globals.username = usernameTextBox.Text;
                 Close();
+            }
             else
                 signInLabel.Visibility = Visibility.Visible;
         }
