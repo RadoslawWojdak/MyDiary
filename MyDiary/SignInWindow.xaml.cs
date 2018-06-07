@@ -27,8 +27,8 @@ namespace MyDiary
 
         private void SignIn()
         {
-            string myConnectionString = "server=127.0.0.1" + ";port=3306" + ";uid=root" + ";pwd=" + ";database=diary";
-            string sql = "SELECT * FROM users WHERE username like @username";
+            string myConnectionString = "server=127.0.0.1" + ";uid=root" + ";pwd=" + ";database=diary";
+            string sql = "SELECT * FROM users WHERE username LIKE @username";
 
             MySqlConnection connection = new MySqlConnection(myConnectionString);
             MySqlCommand myCommand = new MySqlCommand(sql, connection);
@@ -42,7 +42,10 @@ namespace MyDiary
             while (reader.Read())
             {
                 if (usernameTextBox.Text == reader.GetString("username") && passwordBox.Password == reader.GetString("password"))
+                {
                     signed = true;
+                    break;
+                }
             }
             reader.Close();
 

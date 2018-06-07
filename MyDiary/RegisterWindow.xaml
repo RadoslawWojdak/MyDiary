@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyDiary"
         mc:Ignorable="d"
-        Title="MyDiary" Height="265" Width="300">
+        Title="MyDiary" Height="265" Width="300" KeyDown="Window_KeyDown">
     <Grid FocusManager.FocusedElement="{Binding ElementName=emailTextBox}">
         <Label x:Name="titleLabel" Content="Register" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0" FontSize="24"/>
         <Label x:Name="emailLabel" Content="Email" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,64,110,0" Width="120" Height="26"/>
@@ -16,6 +16,7 @@
         <TextBox x:Name="usernameTextBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="110,88,0,0" Height="26" VerticalContentAlignment="Center" TabIndex="1" MaxLength="24"/>
         <PasswordBox x:Name="enterPasswordBox" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="110,112,0,0" Width="120" Height="26" VerticalContentAlignment="Center" TabIndex="2" MaxLength="24"/>
         <PasswordBox x:Name="reenterPasswordBox" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="110,136,0,0" Width="120" Height="26" VerticalContentAlignment="Center" TabIndex="3" MaxLength="24"/>
-        <Button x:Name="registerButton" Content="Register" HorizontalAlignment="Center" VerticalAlignment="Top" Width="75" Margin="0,180,0,0" TabIndex="4"/>
+        <Button x:Name="registerButton" Content="Register" HorizontalAlignment="Center" VerticalAlignment="Top" Width="75" Margin="0,180,0,0" TabIndex="4" Click="registerButton_Click"/>
+        <Label x:Name="errorLabel" Content="" HorizontalAlignment="Center" Margin="0,200,0,0" VerticalAlignment="Top" Background="Transparent" Foreground="Red"/>
     </Grid>
 </Window>
