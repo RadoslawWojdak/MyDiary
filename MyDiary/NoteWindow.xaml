@@ -15,10 +15,10 @@
                 <MenuItem x:Name="menuClose" Header="_Close" Click="menuClose_Click"/>
             </MenuItem>
         </Menu>
-        <TextBox x:Name="titleTextBox" HorizontalAlignment="Left" Height="23" Margin="36,44,0,0" TextWrapping="Wrap" Text="&lt;Title&gt;" VerticalAlignment="Top" Width="Auto" MaxLines="1" MaxLength="45" TabIndex="1"/>
+        <TextBox x:Name="titleTextBox" HorizontalAlignment="Left" Height="23" Margin="36,44,0,0" Text="&lt;Title&gt;" VerticalAlignment="Top" Width="Auto" MaxLines="1" MaxLength="45" TabIndex="1"/>
         <TextBox x:Name="noteTextBox" HorizontalAlignment="Center" Height="Auto" Margin="0,67,0,0" TextWrapping="Wrap" Text="&lt;Note&gt;" VerticalAlignment="Top" Width="Auto" VerticalScrollBarVisibility="Auto" TabIndex="2"/>
         <Label x:Name="titleLabel" Content="Title:" HorizontalAlignment="Left" Margin="0,44,0,0" VerticalAlignment="Top"/>
         <Label x:Name="tagsLabel" Content="Tags:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,18,0,0"/>
-        <TextBox x:Name="tagsTextBox" HorizontalAlignment="Left" Height="23" Margin="36,22,0,0" TextWrapping="Wrap" Text="&lt;Tags&gt;" VerticalAlignment="Top" Width="120" ToolTip="Separate with a comma" TabIndex="0"/>
+        <TextBox x:Name="tagsTextBox" HorizontalAlignment="Left" Height="23" Margin="36,22,0,0" Text="&lt;Tags&gt;" VerticalAlignment="Top" Width="120" ToolTip="Separate with a comma" TabIndex="0"/>
     </Grid>
 </Window>

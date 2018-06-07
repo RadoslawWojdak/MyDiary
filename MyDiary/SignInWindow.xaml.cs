@@ -54,7 +54,7 @@ namespace MyDiary
                 signInLabel.Visibility = Visibility.Visible;
         }
 
-        private void loginButton_Click(object sender, RoutedEventArgs e)
+        private void signInButton_Click(object sender, RoutedEventArgs e)
         {
             SignIn();
         }

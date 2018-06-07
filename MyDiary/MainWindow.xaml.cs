@@ -20,8 +20,22 @@ namespace MyDiary
     /// </summary>
     public partial class MainWindow : Window
     {
+        private enum WinType { WinNote, WinSignIn, WinRegister };
         private bool _closed;
-        private Window _signInWindow;
+        private Window _signRegWindow;
+
+        public bool SignRegWindowState
+        {
+            get
+            {
+                for (int i = 0; i < OwnedWindows.Count; i++)
+                {
+                    if (OwnedWindows[i].Equals(_signRegWindow))
+                        return true;
+                }
+                return false;
+            }
+        }
 
         public MainWindow()
         {
@@ -68,11 +82,38 @@ namespace MyDiary
             }
         }
 
+        private void createWindow(WinType type)
+        {
+            Window win = null;
+            bool openTheWindow = true;
+
+            switch (type)
+            {
+                case WinType.WinNote:
+                    win = new NoteWindow();
+                    break;
+                case WinType.WinSignIn:
+                case WinType.WinRegister:
+                    if (openTheWindow = !SignRegWindowState)
+                    {
+                        if (type == WinType.WinSignIn)
+                            win = _signRegWindow = new SignInWindow();
+                        else
+                            win = _signRegWindow = new RegisterWindow();
+                    }
+                    break;
+            }
+
+            if (openTheWindow)
+            {
+                win.Owner = this;
+                win.Show();
+            }
+        }
+
         private void menuNewNote_Click(object sender, RoutedEventArgs e)
         {
-            NoteWindow note = new NoteWindow();
-            note.Owner = this;
-            note.Show();
+            createWindow(WinType.WinNote);
         }
 
         private void menuNewDiary_Click(object sender, RoutedEventArgs e)
@@ -87,20 +128,12 @@ namespace MyDiary
 
         private void menuSignIn_Click(object sender, RoutedEventArgs e)
         {
-            bool _winIsOpen = false;
+            createWindow(WinType.WinSignIn);
+        }
 
-            for (int i = 0; i < OwnedWindows.Count; i++)
-            {
-                if (OwnedWindows[i].Equals(_signInWindow))
-                    _winIsOpen = true;
-            }
-
-            if (!_winIsOpen)
-            {
-                _signInWindow = new SignInWindow();
-                _signInWindow.Owner = this;
-                _signInWindow.Show();
-            }
+        private void menuRegister_Click(object sender, RoutedEventArgs e)
+        {
+            createWindow(WinType.WinRegister);
         }
 
         private void menuAbout_Click(object sender, RoutedEventArgs e)
