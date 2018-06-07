@@ -14,6 +14,10 @@
                 <Separator />
                 <MenuItem x:Name="menuExit" Header="E_xit" Click="menuExit_Click"/>
             </MenuItem>
+            <MenuItem x:Name="menuAccount" Header="_Account">
+                <MenuItem x:Name="menuSignIn" Header="_Sign in" Click="menuSignIn_Click"/>
+                <MenuItem x:Name="menuRegister" Header="_Register"/>
+            </MenuItem>
             <MenuItem x:Name="menuHelp" Header="_Help">
                 <MenuItem x:Name="menuAbout" Header="_About" Click="menuAbout_Click"/>
                 <MenuItem x:Name="menuVersion" Header="_Version" Click="menuVersion_Click"/>

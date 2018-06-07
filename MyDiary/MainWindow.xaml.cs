@@ -21,6 +21,7 @@ namespace MyDiary
     public partial class MainWindow : Window
     {
         private bool _closed;
+        private Window _signInWindow;
 
         public MainWindow()
         {
@@ -82,6 +83,24 @@ namespace MyDiary
         private void menuExit_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void menuSignIn_Click(object sender, RoutedEventArgs e)
+        {
+            bool _winIsOpen = false;
+
+            for (int i = 0; i < OwnedWindows.Count; i++)
+            {
+                if (OwnedWindows[i].Equals(_signInWindow))
+                    _winIsOpen = true;
+            }
+
+            if (!_winIsOpen)
+            {
+                _signInWindow = new SignInWindow();
+                _signInWindow.Owner = this;
+                _signInWindow.Show();
+            }
         }
 
         private void menuAbout_Click(object sender, RoutedEventArgs e)
