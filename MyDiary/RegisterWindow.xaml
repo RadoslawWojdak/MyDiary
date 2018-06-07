@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyDiary"
         mc:Ignorable="d"
-        Title="MyDiary" Height="265" Width="300" KeyDown="Window_KeyDown">
+        Title="MyDiary" Height="265" Width="300" KeyDown="Window_KeyDown" ResizeMode="NoResize">
     <Grid FocusManager.FocusedElement="{Binding ElementName=emailTextBox}">
         <Label x:Name="titleLabel" Content="Register" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,12,0,0" FontSize="24"/>
         <Label x:Name="emailLabel" Content="Email" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,64,110,0" Width="120" Height="26"/>

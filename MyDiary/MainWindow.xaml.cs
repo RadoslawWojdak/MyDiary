@@ -84,30 +84,38 @@ namespace MyDiary
 
         private void createWindow(WinType type)
         {
-            Window win = null;
-            bool openTheWindow = true;
-
-            switch (type)
+            if (SignRegWindowState == false)
             {
-                case WinType.WinNote:
-                    win = new NoteWindow();
-                    break;
-                case WinType.WinSignIn:
-                case WinType.WinRegister:
-                    if (openTheWindow = !SignRegWindowState)
-                    {
+                Window win = null;
+                bool openTheWindow = true;
+
+                switch (type)
+                {
+                    case WinType.WinNote:
+                        win = new NoteWindow();
+                        break;
+                    case WinType.WinSignIn:
+                    case WinType.WinRegister:
+                        for (int i = OwnedWindows.Count - 1; i >= 0; i--)
+                            OwnedWindows[i].Close();
+                        if (OwnedWindows.Count > 0)
+                        {
+                            openTheWindow = false;
+                            break;
+                        }
+
                         if (type == WinType.WinSignIn)
                             win = _signRegWindow = new SignInWindow();
                         else
                             win = _signRegWindow = new RegisterWindow();
-                    }
-                    break;
-            }
+                        break;
+                }
 
-            if (openTheWindow)
-            {
-                win.Owner = this;
-                win.Show();
+                if (openTheWindow)
+                {
+                    win.Owner = this;
+                    win.Show();
+                }
             }
         }
 
