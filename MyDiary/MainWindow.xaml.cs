@@ -24,25 +24,32 @@ namespace MyDiary
     {
         private enum WinType { WinNote, WinSignIn, WinRegister };
 
+        private List<Button> diaryButtons;
+        private List<Button> noteButtons;
         private DispatcherTimer _timer;
+        private string _diariesFromUser;
         private bool _hasTextBoxMessageBox;
         private bool _closed;
-        
+
         public MainWindow()
         {
             InitializeComponent();
+
+            diaryButtons = new List<Button>();
+            noteButtons = new List<Button>();
 
             _timer = new DispatcherTimer();
             _timer.Tick += tick;
             _timer.Interval = new TimeSpan(0, 0, 1);
             _timer.Start();
 
+            _diariesFromUser = "";
             _hasTextBoxMessageBox = false;
             _closed = false;
 
             AdjustControlsParameters(Width, Height);
         }
-        
+
         private void tick(object sender, EventArgs e)
         {
             if (Globals.logged)
@@ -61,9 +68,43 @@ namespace MyDiary
                 if (Globals.tbMessageBoxResult == MessageBoxResult.OK)
                 {
                     string diaryName = Globals.textBoxMessageBox;
-                    createDiary(diaryName);
+                    if (createDiary(diaryName))
+                        createDiaryButton(diaryName);
                 }
             }
+
+            if (_diariesFromUser != Globals.username)
+            {
+                _diariesFromUser = Globals.username;
+
+                List<string> diariesNames = getDiariesNames(_diariesFromUser);
+                foreach (string name in diariesNames)
+                    createDiaryButton(name);
+            }
+        }
+
+        private List<string> getDiariesNames(string username)
+        {
+            List<string> diariesNames = new List<string>();
+
+            string myConnectionString = "server=127.0.0.1; uid=root; pwd=; database=diary";
+            MySqlConnection connection = new MySqlConnection(myConnectionString);
+
+            connection.Open();
+
+            string sql = "SELECT diaries.name, diaries.users_id, users.username, users.id FROM diaries, users WHERE users.username LIKE @username AND users.id = diaries.users_id";
+            MySqlCommand myCommand = new MySqlCommand(sql, connection);
+            myCommand.Parameters.AddWithValue("username", username);
+
+            MySqlDataReader reader = myCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                diariesNames.Add(reader.GetString("name"));
+            }
+
+            connection.Close();
+
+            return diariesNames;
         }
 
         private bool doesDiaryExists(string diaryName)
@@ -94,7 +135,7 @@ namespace MyDiary
             return exists;
         }
 
-        private void createDiary(string diaryName)
+        private bool createDiary(string diaryName)
         {
             if (Globals.logged && !doesDiaryExists(diaryName))
             {
@@ -110,7 +151,19 @@ namespace MyDiary
                 myCommand.ExecuteNonQuery();
 
                 connection.Close();
+
+                return true;
             }
+            return false;
+        }
+
+        private void createDiaryButton(string name)
+        {
+            Button button = new Button();
+            button.Content = name;
+
+            diaryButtons.Add(button);
+            diariesStackPanel.Children.Add(button);
         }
 
         //at the beginning "ActualWidth" and "ActualHeight" is equal to 0
@@ -233,12 +286,17 @@ namespace MyDiary
         private void menuSignOut_Click(object sender, RoutedEventArgs e)
         {
             Globals.logged = false;
+            Globals.username = "";
 
             Title = "MyDiary";
 
             menuSignIn.IsEnabled = true;
             menuRegister.IsEnabled = true;
             menuSignOut.IsEnabled = false;
+
+            diariesStackPanel.Children.Clear();
+            diaryButtons.Clear();
+            noteButtons.Clear();
         }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyDiary"
         mc:Ignorable="d"
-        Title="MyDiary" Height="600" Width="811" SizeChanged="Window_SizeChanged" StateChanged="Window_StateChanged" Closing="Window_Closing">
+        Title="MyDiary" Height="600" Width="800" SizeChanged="Window_SizeChanged" StateChanged="Window_StateChanged" Closing="Window_Closing">
     <Grid>
         <Menu x:Name="menu" Width="Auto" Height="18" HorizontalAlignment="Left" VerticalAlignment="Top">
             <MenuItem x:Name="menuFile" Header="_File">
@@ -25,5 +25,18 @@
                 <MenuItem x:Name="menuVersion" Header="_Version" Click="menuVersion_Click"/>
             </MenuItem>
         </Menu>
+
+        <Rectangle Fill="#FFC4C4C4" HorizontalAlignment="Left" Height="551" Margin="0,18,0,0" VerticalAlignment="Top" Width="120"/>
+        <Rectangle Fill="#FFC8FFC8" HorizontalAlignment="Left" Height="24" Margin="120,18,0,0" VerticalAlignment="Top" Width="683"/>
+        <TextBlock x:Name="noteTextBlock" HorizontalAlignment="Left" Margin="136,56,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="498" Width="641"/>
+
+
+        <ScrollViewer HorizontalAlignment="Left" Height="527" Margin="0,42,0,0" VerticalAlignment="Top" Width="137" VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="diariesStackPanel" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
+        </ScrollViewer>
+        <Rectangle Fill="#FF8CC48C" HorizontalAlignment="Left" Height="24" Margin="0,18,0,0" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="label" Content="Diaries" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,16,0,0" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+
+
     </Grid>
 </Window>
