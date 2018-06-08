@@ -20,6 +20,7 @@ namespace MyDiary
     /// </summary>
     public partial class NoteWindow : Window
     {
+        private uint _noteID;
         private bool _isClosed;
         public bool Closed { get { return _isClosed; } set { _isClosed = value; } }
 
@@ -27,6 +28,7 @@ namespace MyDiary
         {
             InitializeComponent();
 
+            _noteID = uint.MaxValue;
             _isClosed = false;
             tagsTextBox.Text = "";
             titleTextBox.Text = "";
@@ -51,6 +53,34 @@ namespace MyDiary
             myCommand.Parameters.AddWithValue("text", noteTextBox.Text);
             myCommand.Parameters.AddWithValue("creation_date", date);
             myCommand.Parameters.AddWithValue("username", Globals.username);
+            myCommand.ExecuteNonQuery();
+
+            sql = "SELECT LAST_INSERT_ID()";
+            myCommand = new MySqlCommand(sql, connection);
+            MySqlDataReader reader = myCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                _noteID = reader.GetUInt32(0);
+            }
+
+            connection.Close();
+        }
+
+        private void UpdateNote()
+        {
+            string date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+            string myConnectionString = "server=127.0.0.1; uid=root; pwd=; database=diary";
+            MySqlConnection connection = new MySqlConnection(myConnectionString);
+
+            connection.Open();
+
+            string sql = "UPDATE notes SET title=@title, text=@text, modification_date=@date WHERE id=@id";
+            MySqlCommand myCommand = new MySqlCommand(sql, connection);
+            myCommand.Parameters.AddWithValue("title", titleTextBox.Text);
+            myCommand.Parameters.AddWithValue("text", noteTextBox.Text);
+            myCommand.Parameters.AddWithValue("date", date);
+            myCommand.Parameters.AddWithValue("id", _noteID);
             myCommand.ExecuteNonQuery();
 
             connection.Close();
@@ -101,7 +131,10 @@ namespace MyDiary
 
         private void menuSave_Click(object sender, RoutedEventArgs e)
         {
-            NewNote();
+            if (_noteID == uint.MaxValue)
+                NewNote();
+            else
+                UpdateNote();
         }
 
         private void menuLoad_Click(object sender, RoutedEventArgs e)
