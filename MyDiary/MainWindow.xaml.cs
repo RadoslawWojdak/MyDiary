@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using MySql.Data.MySqlClient;
 
 namespace MyDiary
 {
@@ -41,7 +42,7 @@ namespace MyDiary
 
             AdjustControlsParameters(Width, Height);
         }
-
+        
         private void tick(object sender, EventArgs e)
         {
             if (Globals.logged)
@@ -60,8 +61,55 @@ namespace MyDiary
                 if (Globals.tbMessageBoxResult == MessageBoxResult.OK)
                 {
                     string diaryName = Globals.textBoxMessageBox;
-                    menuFile.Header = diaryName;
+                    createDiary(diaryName);
                 }
+            }
+        }
+
+        private bool doesDiaryExists(string diaryName)
+        {
+            string myConnectionString = "server=127.0.0.1; uid=root; pwd=; database=diary";
+            MySqlConnection connection = new MySqlConnection(myConnectionString);
+
+            connection.Open();
+
+            string sql = "SELECT users_id, name, users.id, username FROM diaries, users WHERE diaries.name LIKE @diaryName AND users.username LIKE @username AND diaries.users_id = users.id";
+            MySqlCommand myCommand = new MySqlCommand(sql, connection);
+            myCommand.Parameters.AddWithValue("diaryName", diaryName);
+            myCommand.Parameters.AddWithValue("username", Globals.username);
+
+            MySqlDataReader reader = myCommand.ExecuteReader();
+            bool exists = false;
+            while (reader.Read())
+            {
+                if (diaryName == reader.GetString("name") && Globals.username == reader.GetString("username"))
+                {
+                    exists = true;
+                    break;
+                }
+            }
+
+            connection.Close();
+
+            return exists;
+        }
+
+        private void createDiary(string diaryName)
+        {
+            if (Globals.logged && !doesDiaryExists(diaryName))
+            {
+                string myConnectionString = "server=127.0.0.1; uid=root; pwd=; database=diary";
+                MySqlConnection connection = new MySqlConnection(myConnectionString);
+
+                connection.Open();
+
+                string sql = "INSERT INTO diaries(users_id, name) SELECT users.id, @diaryName FROM users WHERE username LIKE @username";
+                MySqlCommand myCommand = new MySqlCommand(sql, connection);
+                myCommand.Parameters.AddWithValue("username", Globals.username);
+                myCommand.Parameters.AddWithValue("diaryName", diaryName);
+                myCommand.ExecuteNonQuery();
+
+                connection.Close();
             }
         }
 

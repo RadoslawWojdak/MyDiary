@@ -1,3 +1,4 @@
+DROP SCHEMA diary;
 CREATE SCHEMA diary;
 
 DROP TABLE users;
@@ -14,7 +15,7 @@ CREATE TABLE diaries
 (
 	id INT UNSIGNED NOT NULL UNIQUE PRIMARY KEY AUTO_INCREMENT,
     users_id INT UNSIGNED NOT NULL,
-    name VARCHAR(45) NOT NULL UNIQUE,
+    name VARCHAR(45) NOT NULL,
     description TINYTEXT,
     
     FOREIGN KEY (users_id) REFERENCES users(id)

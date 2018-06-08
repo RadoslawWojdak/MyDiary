@@ -44,7 +44,7 @@ namespace MyDiary
 
         private bool doesUserExist(string email, string username)
         {
-            string myConnectionString = "server=127.0.0.1" + ";uid=root" + ";pwd=" + ";database=diary";
+            string myConnectionString = "server=127.0.0.1; uid=root; pwd=; database=diary";
             MySqlConnection connection = new MySqlConnection(myConnectionString);
 
             connection.Open();
@@ -74,7 +74,7 @@ namespace MyDiary
                 errorLabel.Content = "User with this name or email already exists!";
             else
             {
-                string myConnectionString = "server=127.0.0.1" + ";uid=root" + ";pwd=" + ";database=diary";
+                string myConnectionString = "server=127.0.0.1; uid=root; pwd=; database=diary";
                 MySqlConnection connection = new MySqlConnection(myConnectionString);
 
                 connection.Open();
