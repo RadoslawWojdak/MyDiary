@@ -58,7 +58,7 @@ namespace MyDiary
             bool found = false;
             while (reader.Read())
             {
-                if (username == reader.GetString("username") || email == reader.GetString("email"))
+                if (username.ToUpper() == reader.GetString("username").ToUpper() || email.ToUpper() == reader.GetString("email").ToUpper())
                     found = true;
             }
             reader.Close();

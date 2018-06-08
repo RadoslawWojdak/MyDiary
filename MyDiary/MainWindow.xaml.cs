@@ -131,7 +131,7 @@ namespace MyDiary
             bool exists = false;
             while (reader.Read())
             {
-                if (diaryName == reader.GetString("name") && Globals.username == reader.GetString("username"))
+                if (diaryName.ToUpper() == reader.GetString("name").ToUpper() && Globals.username == reader.GetString("username"))
                 {
                     exists = true;
                     break;
@@ -169,6 +169,7 @@ namespace MyDiary
         {
             Button button = new Button();
             button.Content = name;
+            button.Click += diaryButton_Click;
 
             diaryButtons.Add(button);
             diariesStackPanel.Children.Add(button);
@@ -295,6 +296,7 @@ namespace MyDiary
         {
             Globals.logged = false;
             Globals.username = "";
+            Globals.openDiary = "";
 
             Title = "MyDiary";
 
@@ -305,6 +307,12 @@ namespace MyDiary
             diariesStackPanel.Children.Clear();
             diaryButtons.Clear();
             noteButtons.Clear();
+        }
+
+        private void diaryButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            Globals.openDiary = button.Content.ToString();
         }
     }
 }

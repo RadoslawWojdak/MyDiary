@@ -14,5 +14,7 @@ namespace MyDiary
 
         public static string textBoxMessageBox = "";
         public static MessageBoxResult tbMessageBoxResult;
+
+        public static string openDiary = "";
     }
 }

@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MySql.Data.MySqlClient;
 
 namespace MyDiary
 {
@@ -32,6 +33,27 @@ namespace MyDiary
             noteTextBox.Text = "";
 
             AdjustControlsParameters(Width, Height);
+        }
+
+        private void NewNote()
+        {
+            string date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+            string myConnectionString = "server=127.0.0.1; uid=root; pwd=; database=diary";
+            MySqlConnection connection = new MySqlConnection(myConnectionString);
+
+            connection.Open();
+            
+            string sql = "INSERT INTO notes(diaries_id, title, text, creation_date, modification_date) SELECT diaries.id, @title, @text, @creation_date, @creation_date FROM diaries, users WHERE diaries.name LIKE @diary AND users.username LIKE @username AND users.id = diaries.users_id";
+            MySqlCommand myCommand = new MySqlCommand(sql, connection);
+            myCommand.Parameters.AddWithValue("diary", Globals.openDiary);
+            myCommand.Parameters.AddWithValue("title", titleTextBox.Text);
+            myCommand.Parameters.AddWithValue("text", noteTextBox.Text);
+            myCommand.Parameters.AddWithValue("creation_date", date);
+            myCommand.Parameters.AddWithValue("username", Globals.username);
+            myCommand.ExecuteNonQuery();
+
+            connection.Close();
         }
 
         //at the beginning "ActualWidth" and "ActualHeight" is equal to 0
@@ -79,7 +101,7 @@ namespace MyDiary
 
         private void menuSave_Click(object sender, RoutedEventArgs e)
         {
-            ;
+            NewNote();
         }
 
         private void menuLoad_Click(object sender, RoutedEventArgs e)
