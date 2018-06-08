@@ -75,11 +75,19 @@ namespace MyDiary
 
             if (_diariesFromUser != Globals.username)
             {
-                _diariesFromUser = Globals.username;
+                if (Globals.username != "")
+                {
+                    _diariesFromUser = Globals.username;
+                    usernameLabel.Content = Globals.username;
 
-                List<string> diariesNames = getDiariesNames(_diariesFromUser);
-                foreach (string name in diariesNames)
-                    createDiaryButton(name);
+                    List<string> diariesNames = getDiariesNames(_diariesFromUser);
+                    foreach (string name in diariesNames)
+                        createDiaryButton(name);
+                }
+                else
+                {
+                    usernameLabel.Content = "You're not logged in";
+                }
             }
         }
 

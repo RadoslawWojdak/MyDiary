@@ -34,8 +34,8 @@
         <ScrollViewer HorizontalAlignment="Left" Height="527" Margin="0,42,0,0" VerticalAlignment="Top" Width="137" VerticalScrollBarVisibility="Auto">
             <StackPanel x:Name="diariesStackPanel" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
         </ScrollViewer>
-        <Rectangle Fill="#FF8CC48C" HorizontalAlignment="Left" Height="24" Margin="0,18,0,0" VerticalAlignment="Top" Width="120"/>
-        <Label x:Name="label" Content="Diaries" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,16,0,0" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Rectangle x:Name="usernameRectangle" Fill="#FF8CC48C" HorizontalAlignment="Left" Height="24" Margin="0,18,0,0" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="usernameLabel" Content="You're not logged in" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,16,0,0" Width="120" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 
 
     </Grid>

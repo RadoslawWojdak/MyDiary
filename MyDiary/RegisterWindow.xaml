@@ -12,8 +12,8 @@
         <Label x:Name="usernameLabel" Content="Username" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,88,110,0" Width="120" Height="26"/>
         <Label x:Name="passwordLabel" Content="Password" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,112,110,0" Width="120" Height="26"/>
         <Label x:Name="repeatPasswordLabel" Content="Re-enter password" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,136,110,0" Width="120" Height="26"/>
-        <TextBox x:Name="emailTextBox" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" Margin="110,64,0,0" Height="26" VerticalContentAlignment="Center" TabIndex="0" MaxLength="45"/>
-        <TextBox x:Name="usernameTextBox" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="110,88,0,0" Height="26" VerticalContentAlignment="Center" TabIndex="1" MaxLength="24"/>
+        <TextBox x:Name="emailTextBox" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" Margin="110,64,0,0" Height="26" VerticalContentAlignment="Center" TabIndex="0" MaxLength="45" MaxLines="1"/>
+        <TextBox x:Name="usernameTextBox" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" Margin="110,88,0,0" Height="26" VerticalContentAlignment="Center" TabIndex="1" MaxLength="24" MaxLines="1"/>
         <PasswordBox x:Name="enterPasswordBox" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="110,112,0,0" Width="120" Height="26" VerticalContentAlignment="Center" TabIndex="2" MaxLength="24"/>
         <PasswordBox x:Name="reenterPasswordBox" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="110,136,0,0" Width="120" Height="26" VerticalContentAlignment="Center" TabIndex="3" MaxLength="24"/>
         <Button x:Name="registerButton" Content="Register" HorizontalAlignment="Center" VerticalAlignment="Top" Width="75" Margin="0,180,0,0" TabIndex="4" Click="registerButton_Click"/>
