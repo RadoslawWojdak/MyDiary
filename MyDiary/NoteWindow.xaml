@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MyDiary"
         mc:Ignorable="d"
         Title="MyDiary" Height="480" Width="640" SizeChanged="Window_SizeChanged" StateChanged="Window_StateChanged" Closing="Window_Closing">
-    <Grid>
+    <Grid FocusManager.FocusedElement="{Binding ElementName=noteTextBox}">
         <Menu x:Name="menu" Width="Auto" Height="18" HorizontalAlignment="Left" VerticalAlignment="Top">
             <MenuItem x:Name="menuFile" Header="_File">
                 <MenuItem x:Name="menuSave" Header="_Save" Click="menuSave_Click"/>

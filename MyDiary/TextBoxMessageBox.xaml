@@ -1,0 +1,15 @@
+﻿<Window x:Class="MyDiary.TextBoxMessageBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyDiary"
+        mc:Ignorable="d"
+        Title="&lt;TITLE&gt;" Height="140" Width="350" ResizeMode="NoResize" KeyDown="Window_KeyDown">
+    <Grid FocusManager.FocusedElement="{Binding ElementName=textBox}">
+        <Label x:Name="descriptionLabel" Content="&lt;DESCRIPTION&gt;" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"/>
+        <TextBox x:Name="textBox" HorizontalAlignment="Center" Height="24" Margin="0,36,0,0" VerticalAlignment="Top" Width="325" MaxLines="1" TabIndex="0" TextChanged="textBox_TextChanged"/>
+        <Button x:Name="okButton" Content="OK" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Margin="0,0,100,10" TabIndex="1" Click="okButton_Click"/>
+        <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="75" Margin="0,0,10,10" RenderTransformOrigin="0.074,0.717" TabIndex="2" Click="cancelButton_Click"/>
+    </Grid>
+</Window>

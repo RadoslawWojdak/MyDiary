@@ -23,23 +23,10 @@ namespace MyDiary
     {
         private enum WinType { WinNote, WinSignIn, WinRegister };
 
-        private Window _signRegWindow;
         private DispatcherTimer _timer;
+        private bool _hasTextBoxMessageBox;
         private bool _closed;
-
-        public bool SignRegWindowState
-        {
-            get
-            {
-                for (int i = 0; i < OwnedWindows.Count; i++)
-                {
-                    if (OwnedWindows[i].Equals(_signRegWindow))
-                        return true;
-                }
-                return false;
-            }
-        }
-
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -49,6 +36,7 @@ namespace MyDiary
             _timer.Interval = new TimeSpan(0, 0, 1);
             _timer.Start();
 
+            _hasTextBoxMessageBox = false;
             _closed = false;
 
             AdjustControlsParameters(Width, Height);
@@ -63,6 +51,17 @@ namespace MyDiary
                 menuSignIn.IsEnabled = false;
                 menuRegister.IsEnabled = false;
                 menuSignOut.IsEnabled = true;
+            }
+
+            if (_hasTextBoxMessageBox && Globals.tbMessageBoxResult != MessageBoxResult.None)
+            {
+                _hasTextBoxMessageBox = false;
+
+                if (Globals.tbMessageBoxResult == MessageBoxResult.OK)
+                {
+                    string diaryName = Globals.textBoxMessageBox;
+                    menuFile.Header = diaryName;
+                }
             }
         }
 
@@ -104,38 +103,30 @@ namespace MyDiary
 
         private void createWindow(WinType type)
         {
-            if (SignRegWindowState == false)
+            Window win = null;
+
+            switch (type)
             {
-                Window win = null;
-                bool openTheWindow = true;
-
-                switch (type)
-                {
-                    case WinType.WinNote:
-                        win = new NoteWindow();
-                        break;
-                    case WinType.WinSignIn:
-                    case WinType.WinRegister:
-                        for (int i = OwnedWindows.Count - 1; i >= 0; i--)
-                            OwnedWindows[i].Close();
-                        if (OwnedWindows.Count > 0)
-                        {
-                            openTheWindow = false;
-                            break;
-                        }
-
-                        if (type == WinType.WinSignIn)
-                            win = _signRegWindow = new SignInWindow();
-                        else
-                            win = _signRegWindow = new RegisterWindow();
-                        break;
-                }
-
-                if (openTheWindow)
-                {
+                case WinType.WinNote:
+                    win = new NoteWindow();
                     win.Owner = this;
                     win.Show();
-                }
+                    break;
+                case WinType.WinSignIn:
+                case WinType.WinRegister:
+                    for (int i = OwnedWindows.Count - 1; i >= 0; i--)
+                        OwnedWindows[i].Close();
+                    if (OwnedWindows.Count > 0)
+                        break;
+
+                    if (type == WinType.WinSignIn)
+                        win = new SignInWindow();
+                    else
+                        win = new RegisterWindow();
+
+                    win.Owner = this;
+                    win.ShowDialog();
+                    break;
             }
         }
 
@@ -146,7 +137,9 @@ namespace MyDiary
 
         private void menuNewDiary_Click(object sender, RoutedEventArgs e)
         {
-            ;
+            TextBoxMessageBox mb = new TextBoxMessageBox("Enter new diary's name:", "New diary");
+            mb.ShowDialog();
+            _hasTextBoxMessageBox = true;
         }
 
         private void menuExit_Click(object sender, RoutedEventArgs e)
