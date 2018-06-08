@@ -52,15 +52,6 @@ namespace MyDiary
 
         private void tick(object sender, EventArgs e)
         {
-            if (Globals.logged)
-            {
-                Title = Globals.username + " - MyDiary";
-
-                menuSignIn.IsEnabled = false;
-                menuRegister.IsEnabled = false;
-                menuSignOut.IsEnabled = true;
-            }
-
             if (_hasTextBoxMessageBox && Globals.tbMessageBoxResult != MessageBoxResult.None)
             {
                 _hasTextBoxMessageBox = false;
@@ -75,14 +66,20 @@ namespace MyDiary
 
             if (_diariesFromUser != Globals.username)
             {
-                if (Globals.username != "")
+                if (Globals.logged)
                 {
+                    Title = Globals.username + " - MyDiary";
                     _diariesFromUser = Globals.username;
                     usernameLabel.Content = Globals.username;
 
                     List<string> diariesNames = getDiariesNames(_diariesFromUser);
                     foreach (string name in diariesNames)
                         createDiaryButton(name);
+                    
+                    menuNewDiary.IsEnabled = true;
+                    menuSignIn.IsEnabled = false;
+                    menuRegister.IsEnabled = false;
+                    menuSignOut.IsEnabled = true;
                 }
                 else
                 {
@@ -300,6 +297,8 @@ namespace MyDiary
 
             Title = "MyDiary";
 
+            menuNewNote.IsEnabled = false;
+            menuNewDiary.IsEnabled = false;
             menuSignIn.IsEnabled = true;
             menuRegister.IsEnabled = true;
             menuSignOut.IsEnabled = false;
@@ -313,6 +312,8 @@ namespace MyDiary
         {
             Button button = sender as Button;
             Globals.openDiary = button.Content.ToString();
+
+            menuNewNote.IsEnabled = true;
         }
     }
 }
