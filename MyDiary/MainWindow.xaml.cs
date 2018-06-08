@@ -237,6 +237,12 @@ namespace MyDiary
             }
         }
 
+        private void uncheckTheDiaryButtons()
+        {
+            foreach (Button button in diaryButtons)
+                button.Background = new SolidColorBrush(Color.FromRgb(221, 221, 221));
+        }
+
         private void menuNewNote_Click(object sender, RoutedEventArgs e)
         {
             createWindow(WinType.WinNote);
@@ -312,6 +318,9 @@ namespace MyDiary
         {
             Button button = sender as Button;
             Globals.openDiary = button.Content.ToString();
+
+            uncheckTheDiaryButtons();
+            button.Background = Brushes.LightCyan;
 
             menuNewNote.IsEnabled = true;
         }
