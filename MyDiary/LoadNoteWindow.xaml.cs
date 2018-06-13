@@ -21,6 +21,7 @@ namespace MyDiary
     public partial class LoadNoteWindow : Window
     {
         List<Button> _noteButtons;
+        List<CheckBox> _tagCheckBoxes;
         List<uint> _noteIDs;
         bool _closed;
 
@@ -29,12 +30,15 @@ namespace MyDiary
             InitializeComponent();
 
             _noteButtons = new List<Button>();
+            _tagCheckBoxes = new List<CheckBox>();
             _closed = false;
 
             AdjustControlsParameters(Width, Height);
 
             foreach (string note in getNotesNames(Globals.username, Globals.openDiary, ref _noteIDs))
                 createNoteButton(note);
+            foreach (string tag in getTagsNames(Globals.username, Globals.openDiary))
+                createTagCheckBox(tag);
         }
 
         //at the beginning "ActualWidth" and "ActualHeight" is equal to 0
@@ -42,6 +46,7 @@ namespace MyDiary
         {
             notesScroll.Width = winWidth - 16;
             notesScroll.Height = winHeight - 71;
+            tagsScroll.Width = winWidth - 16;
         }
 
         private List<string> getNotesNames(string username, string diary, ref List<uint> noteIDs)
@@ -71,6 +76,31 @@ namespace MyDiary
             return notesNames;
         }
 
+        private List<string> getTagsNames(string username, string diary)
+        {
+            List<string> tags = new List<string>();
+            
+            string myConnectionString = "server=127.0.0.1; uid=root; pwd=; database=diary";
+            MySqlConnection connection = new MySqlConnection(myConnectionString);
+
+            connection.Open();
+
+            string sql = "SELECT tags.text FROM tags, notes, notes_tags, diaries, users WHERE users.username = @username AND diaries.name = @diary AND diaries.users_id = users.id AND notes.diaries_id = diaries.id AND notes_tags.notes_id = notes.id AND notes_tags.tags_id = tags.id";
+            MySqlCommand myCommand = new MySqlCommand(sql, connection);
+            myCommand.Parameters.AddWithValue("username", username);
+            myCommand.Parameters.AddWithValue("diary", diary);
+
+            MySqlDataReader reader = myCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                tags.Add(reader.GetString(0));
+            }
+
+            connection.Close();
+
+            return tags;
+        }
+
         private void createNoteButton(string name)
         {
             Button button = new Button();
@@ -79,6 +109,15 @@ namespace MyDiary
 
             _noteButtons.Add(button);
             notesStackPanel.Children.Add(button);
+        }
+
+        private void createTagCheckBox(string name)
+        {
+            CheckBox checkBox = new CheckBox();
+            checkBox.Content = name;
+
+            _tagCheckBoxes.Add(checkBox);
+            tagsStackpanel.Children.Add(checkBox);
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)

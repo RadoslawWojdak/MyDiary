@@ -10,6 +10,9 @@
         <ScrollViewer x:Name="notesScroll" HorizontalAlignment="Left" Height="237" VerticalAlignment="Top" Width="292" VerticalScrollBarVisibility="Visible" Margin="0,32,0,0">
             <StackPanel x:Name="notesStackPanel"/>
         </ScrollViewer>
+        <ScrollViewer x:Name="tagsScroll" HorizontalAlignment="Left" Height="32" VerticalAlignment="Top" Width="292" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible">
+            <StackPanel x:Name="tagsStackpanel" Orientation="Horizontal"/>
+        </ScrollViewer>
 
     </Grid>
 </Window>

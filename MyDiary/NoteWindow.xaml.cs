@@ -200,7 +200,8 @@ namespace MyDiary
 
             connection.Close();
 
-            tagsTextBox.Text = tagsTextBox.Text.Substring(0, tagsTextBox.Text.Length - 1);   //Last comma
+            if (tagsTextBox.Text.Length > 0)
+                tagsTextBox.Text = tagsTextBox.Text.Substring(0, tagsTextBox.Text.Length - 1);   //Last comma
         }
 
         private void SaveNote()
