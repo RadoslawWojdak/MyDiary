@@ -28,7 +28,7 @@ namespace MyDiary
         public NoteWindow()
         {
             InitializeComponent();
-
+            
             _noteID = uint.MaxValue;
             _isClosed = false;
             tagsTextBox.Text = "";
@@ -116,6 +116,91 @@ namespace MyDiary
             }
 
             connection.Close();
+
+            LoadTags();
+        }
+
+        private void CreateTags()
+        {
+            List<string> tags = tagsTextBox.Text.Split(',').ToList();
+            List<uint> tags_id = new List<uint>();
+            for (int i = 0; i < tags.Count; i++)
+                tags[i] = tags[i].Trim();
+            while (tags.Remove("")) ;
+
+            string myConnectionString = "server=127.0.0.1; uid=root; pwd=; database=diary";
+            MySqlConnection connection = new MySqlConnection(myConnectionString);
+
+            connection.Open();
+
+            string sql = "INSERT IGNORE INTO tags(text) VALUES(@text)";
+            MySqlCommand myCommand = new MySqlCommand(sql, connection);
+            myCommand.Parameters.Add("text", MySqlDbType.String);
+            foreach (string tag in tags)
+            {
+                myCommand.Parameters[0].Value = tag;
+                myCommand.ExecuteNonQuery();
+            }
+            connection.Close();
+
+            foreach (string tag in tags)
+            {
+                connection.Open();
+                sql = "SELECT id FROM tags WHERE tags.text LIKE @text";
+                myCommand = new MySqlCommand(sql, connection);
+                myCommand.Parameters.Add("text", MySqlDbType.String);
+                myCommand.Parameters[0].Value = tag;
+
+                MySqlDataReader reader = myCommand.ExecuteReader();
+                while (reader.Read())
+                {
+                    tags_id.Add(reader.GetUInt32("id"));
+                }
+                connection.Close();
+            }
+
+            //Refresh tags
+            connection.Open();
+            sql = "DELETE FROM notes_tags WHERE notes_id = @id";
+            myCommand = new MySqlCommand(sql, connection);
+            myCommand.Parameters.AddWithValue("id", _noteID);
+            myCommand.ExecuteNonQuery();
+
+            sql = "INSERT IGNORE INTO notes_tags(notes_id, tags_id) VALUES(@notes_id, @tags_id)";
+            myCommand = new MySqlCommand(sql, connection);
+            myCommand.Parameters.AddWithValue("notes_id", _noteID);
+            myCommand.Parameters.Add("tags_id", MySqlDbType.String);
+            for (int i = 0; i < tags_id.Count; i++)
+            {
+                myCommand.Parameters[1].Value = tags_id[i];
+                myCommand.ExecuteNonQuery();
+            }
+
+            connection.Close();
+        }
+
+        private void LoadTags()
+        {
+            tagsTextBox.Text = "";
+
+            string myConnectionString = "server=127.0.0.1; uid=root; pwd=; database=diary";
+            MySqlConnection connection = new MySqlConnection(myConnectionString);
+
+            connection.Open();
+
+            string sql = "SELECT text FROM tags, notes_tags WHERE notes_tags.notes_id LIKE @id AND notes_tags.tags_id = tags.id";
+            MySqlCommand myCommand = new MySqlCommand(sql, connection);
+            myCommand.Parameters.AddWithValue("id", _noteID);
+
+            MySqlDataReader reader = myCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                tagsTextBox.Text += reader.GetString("text") + ",";
+            }
+
+            connection.Close();
+
+            tagsTextBox.Text = tagsTextBox.Text.Substring(0, tagsTextBox.Text.Length - 1);   //Last comma
         }
 
         private void SaveNote()
@@ -124,6 +209,7 @@ namespace MyDiary
                 NewNote();
             else
                 UpdateNote();
+            CreateTags();
             _changed = false;
         }
 
