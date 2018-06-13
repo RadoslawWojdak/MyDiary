@@ -40,6 +40,12 @@ namespace MyDiary
             _changed = false;
         }
 
+        public NoteWindow(uint id) : this()
+        {
+            LoadNote(id);
+            _changed = false;
+        }
+
         private void NewNote()
         {
             string date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
@@ -85,6 +91,29 @@ namespace MyDiary
             myCommand.Parameters.AddWithValue("date", date);
             myCommand.Parameters.AddWithValue("id", _noteID);
             myCommand.ExecuteNonQuery();
+
+            connection.Close();
+        }
+
+        private void LoadNote(uint id)
+        {
+            _noteID = id;
+
+            string myConnectionString = "server=127.0.0.1; uid=root; pwd=; database=diary";
+            MySqlConnection connection = new MySqlConnection(myConnectionString);
+
+            connection.Open();
+
+            string sql = "SELECT * FROM notes WHERE notes.id=@id";
+            MySqlCommand myCommand = new MySqlCommand(sql, connection);
+            myCommand.Parameters.AddWithValue("id", id);
+
+            MySqlDataReader reader = myCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                titleTextBox.Text = reader.GetString("title");
+                noteTextBox.Text = reader.GetString("text");
+            }
 
             connection.Close();
         }
@@ -158,7 +187,9 @@ namespace MyDiary
 
         private void menuLoad_Click(object sender, RoutedEventArgs e)
         {
-            ;
+            LoadNoteWindow loadWin = new LoadNoteWindow();
+            loadWin.Owner = this;
+            loadWin.Show();
         }
 
         private void menuClose_Click(object sender, RoutedEventArgs e)
