@@ -22,6 +22,7 @@ namespace MyDiary
     {
         private uint _noteID;
         private bool _isClosed;
+        private bool _changed;
         public bool Closed { get { return _isClosed; } set { _isClosed = value; } }
 
         public NoteWindow()
@@ -35,6 +36,8 @@ namespace MyDiary
             noteTextBox.Text = "";
 
             AdjustControlsParameters(Width, Height);
+
+            _changed = false;
         }
 
         private void NewNote()
@@ -86,6 +89,15 @@ namespace MyDiary
             connection.Close();
         }
 
+        private void SaveNote()
+        {
+            if (_noteID == uint.MaxValue)
+                NewNote();
+            else
+                UpdateNote();
+            _changed = false;
+        }
+
         //at the beginning "ActualWidth" and "ActualHeight" is equal to 0
         private void AdjustControlsParameters(double winWidth, double winHeight)
         {
@@ -106,10 +118,15 @@ namespace MyDiary
 
         public void Close()
         {
-            MessageBoxResult mbResult = MessageBox.Show("Do you want to save the changes?", "Save note", MessageBoxButton.YesNoCancel);
+            MessageBoxResult mbResult = MessageBoxResult.No;
+            if (_changed)
+                mbResult = MessageBox.Show("Do you want to save the changes?", "Save note", MessageBoxButton.YesNoCancel);
 
             if (mbResult != MessageBoxResult.Cancel)
             {
+                if (mbResult == MessageBoxResult.Yes)
+                    SaveNote();
+
                 Window win = this;
                 Closed = true;
                 win.Close();
@@ -118,23 +135,25 @@ namespace MyDiary
 
         public void Close(System.ComponentModel.CancelEventArgs e)
         {
-            if (!Closed)
+            if (!Closed && _changed)
             {
                 MessageBoxResult mbResult = MessageBox.Show("Do you want to save the changes?", "Save note", MessageBoxButton.YesNoCancel);
 
                 if (mbResult == MessageBoxResult.Cancel)
                     e.Cancel = true;
                 else
+                {
+                    if (mbResult == MessageBoxResult.Yes)
+                        SaveNote();
+
                     Closed = true;
+                }
             }
         }
 
         private void menuSave_Click(object sender, RoutedEventArgs e)
         {
-            if (_noteID == uint.MaxValue)
-                NewNote();
-            else
-                UpdateNote();
+            SaveNote();
         }
 
         private void menuLoad_Click(object sender, RoutedEventArgs e)
@@ -160,6 +179,21 @@ namespace MyDiary
         private void Window_StateChanged(object sender, EventArgs e)
         {
             AdjustControlsParameters(ActualWidth, ActualHeight);
+        }
+
+        private void tagsTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            _changed = true;
+        }
+
+        private void titleTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            _changed = true;
+        }
+
+        private void noteTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            _changed = true;
         }
     }
 }
