@@ -95,6 +95,7 @@ namespace MyDiary
                 if (_noteButtons[i] == button)
                 {
                     NoteWindow noteWin = new NoteWindow(_noteIDs[i]);
+                    noteWin.Owner = Owner;
                     noteWin.Show();
                     break;
                 }

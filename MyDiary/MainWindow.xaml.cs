@@ -22,7 +22,7 @@ namespace MyDiary
     /// </summary>
     public partial class MainWindow : Window
     {
-        private enum WinType { WinNote, WinSignIn, WinRegister };
+        private enum WinType { WinNote, WinLoadNote, WinSignIn, WinRegister };
 
         private List<Button> diaryButtons;
         private List<Button> noteButtons;
@@ -215,7 +215,11 @@ namespace MyDiary
             switch (type)
             {
                 case WinType.WinNote:
-                    win = new NoteWindow();
+                case WinType.WinLoadNote:
+                    if (type == WinType.WinNote)
+                        win = new NoteWindow();
+                    else
+                        win = new LoadNoteWindow();
                     win.Owner = this;
                     win.Show();
                     break;
@@ -246,6 +250,11 @@ namespace MyDiary
         private void menuNewNote_Click(object sender, RoutedEventArgs e)
         {
             createWindow(WinType.WinNote);
+        }
+
+        private void menuLoadNote_Click(object sender, RoutedEventArgs e)
+        {
+            createWindow(WinType.WinLoadNote);
         }
 
         private void menuNewDiary_Click(object sender, RoutedEventArgs e)
@@ -304,6 +313,7 @@ namespace MyDiary
             Title = "MyDiary";
 
             menuNewNote.IsEnabled = false;
+            menuLoadNote.IsEnabled = false;
             menuNewDiary.IsEnabled = false;
             menuSignIn.IsEnabled = true;
             menuRegister.IsEnabled = true;
@@ -323,6 +333,7 @@ namespace MyDiary
             button.Background = Brushes.LightCyan;
 
             menuNewNote.IsEnabled = true;
+            menuLoadNote.IsEnabled = true;
         }
     }
 }

@@ -10,6 +10,7 @@
         <Menu x:Name="menu" Width="Auto" Height="18" HorizontalAlignment="Left" VerticalAlignment="Top">
             <MenuItem x:Name="menuFile" Header="_File">
                 <MenuItem x:Name="menuNewNote" Header="New _Note" Click="menuNewNote_Click" IsEnabled="False"/>
+                <MenuItem x:Name="menuLoadNote" Header="_Load Note" Click="menuLoadNote_Click" IsEnabled="False"/>
                 <MenuItem x:Name="menuNewDiary" Header="New _Diary" Click="menuNewDiary_Click" IsEnabled="False"/>
                 <Separator />
                 <MenuItem x:Name="menuExit" Header="E_xit" Click="menuExit_Click"/>
