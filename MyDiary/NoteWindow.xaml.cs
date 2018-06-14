@@ -104,7 +104,7 @@ namespace MyDiary
 
             connection.Open();
 
-            string sql = "SELECT * FROM notes WHERE notes.id=@id";
+            string sql = "SELECT title, text FROM notes WHERE notes.id=@id";
             MySqlCommand myCommand = new MySqlCommand(sql, connection);
             myCommand.Parameters.AddWithValue("id", id);
 

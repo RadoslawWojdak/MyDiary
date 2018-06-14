@@ -81,10 +81,10 @@ namespace MyDiary
                     menuRegister.IsEnabled = false;
                     menuSignOut.IsEnabled = true;
                 }
-                else
-                {
-                    usernameLabel.Content = "You're not logged in";
-                }
+            }
+            else if (!Globals.logged)
+            {
+                usernameLabel.Content = "You're not logged in";
             }
         }
 
@@ -97,7 +97,7 @@ namespace MyDiary
 
             connection.Open();
 
-            string sql = "SELECT diaries.name, diaries.users_id, users.username, users.id FROM diaries, users WHERE users.username LIKE @username AND users.id = diaries.users_id";
+            string sql = "SELECT diaries.name FROM diaries, users WHERE users.username LIKE @username AND users.id = diaries.users_id";
             MySqlCommand myCommand = new MySqlCommand(sql, connection);
             myCommand.Parameters.AddWithValue("username", username);
 
@@ -119,7 +119,7 @@ namespace MyDiary
 
             connection.Open();
 
-            string sql = "SELECT users_id, name, users.id, username FROM diaries, users WHERE diaries.name LIKE @diaryName AND users.username LIKE @username AND diaries.users_id = users.id";
+            string sql = "SELECT name, username FROM diaries, users WHERE diaries.name LIKE @diaryName AND users.username LIKE @username AND diaries.users_id = users.id";
             MySqlCommand myCommand = new MySqlCommand(sql, connection);
             myCommand.Parameters.AddWithValue("diaryName", diaryName);
             myCommand.Parameters.AddWithValue("username", Globals.username);
@@ -310,6 +310,7 @@ namespace MyDiary
             Globals.username = "";
             Globals.openDiary = "";
 
+            _diariesFromUser = "";
             Title = "MyDiary";
 
             menuNewNote.IsEnabled = false;

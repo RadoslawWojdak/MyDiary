@@ -28,7 +28,7 @@ namespace MyDiary
         private void SignIn()
         {
             string myConnectionString = "server=127.0.0.1; uid=root; pwd=; database=diary";
-            string sql = "SELECT * FROM users WHERE username LIKE @username";
+            string sql = "SELECT username, password FROM users WHERE username LIKE @username";
             
             MySqlConnection connection = new MySqlConnection(myConnectionString);
             MySqlCommand myCommand = new MySqlCommand(sql, connection);
