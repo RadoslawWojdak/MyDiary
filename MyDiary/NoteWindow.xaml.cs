@@ -229,7 +229,7 @@ namespace MyDiary
             titleTextBox.Margin = new Thickness(textBoxLeft, tagsTextBox.Margin.Top + tagsTextBox.ActualHeight, 0, 0);
 
             noteTextBox.Width = winWidth - 24;
-            noteTextBox.Height = winHeight - menu.Height - titleTextBox.Height - 42;
+            noteTextBox.Height = winHeight - menu.Height - titleTextBox.Height - 70;
         }
 
         public void Close()
