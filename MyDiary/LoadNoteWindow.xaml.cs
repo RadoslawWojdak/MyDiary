@@ -20,6 +20,9 @@ namespace MyDiary
     /// </summary>
     public partial class LoadNoteWindow : Window
     {
+        List<string> _allNotes;
+        List<uint> _allNoteIDs; 
+
         List<Button> _noteButtons;
         List<CheckBox> _tagCheckBoxes;
         List<uint> _noteIDs;
@@ -28,17 +31,23 @@ namespace MyDiary
         public LoadNoteWindow()
         {
             InitializeComponent();
-
+            
+            _allNoteIDs = new List<uint>();
             _noteButtons = new List<Button>();
             _tagCheckBoxes = new List<CheckBox>();
             _closed = false;
 
             AdjustControlsParameters(Width, Height);
 
-            foreach (string note in getNotesNames(Globals.username, Globals.openDiary, ref _noteIDs))
+            _allNotes = GetNotesNames(Globals.username, Globals.openDiary, ref _noteIDs);
+
+            foreach (string note in _allNotes)
                 createNoteButton(note);
-            foreach (string tag in getTagsNames(Globals.username, Globals.openDiary))
+            foreach (string tag in GetTagsNames(Globals.username, Globals.openDiary))
                 createTagCheckBox(tag);
+
+            foreach (uint id in _noteIDs)
+                _allNoteIDs.Add(id);
         }
 
         //at the beginning "ActualWidth" and "ActualHeight" is equal to 0
@@ -49,7 +58,7 @@ namespace MyDiary
             tagsScroll.Width = winWidth - 16;
         }
 
-        private List<string> getNotesNames(string username, string diary, ref List<uint> noteIDs)
+        private List<string> GetNotesNames(string username, string diary, ref List<uint> noteIDs)
         {
             noteIDs = new List<uint>();
             List<string> notesNames = new List<string>();
@@ -59,7 +68,7 @@ namespace MyDiary
 
             connection.Open();
 
-            string sql = "SELECT notes.id, notes.title, notes.diaries_id, diaries.name, diaries.users_id, users.username, users.id FROM notes, diaries, users WHERE users.username LIKE @username AND diaries.name LIKE @diary AND users.id = diaries.users_id AND diaries.id = notes.diaries_id";
+            string sql = "SELECT notes.id, notes.title FROM notes, diaries, users WHERE users.username LIKE @username AND diaries.name LIKE @diary AND users.id = diaries.users_id AND diaries.id = notes.diaries_id";
             MySqlCommand myCommand = new MySqlCommand(sql, connection);
             myCommand.Parameters.AddWithValue("username", username);
             myCommand.Parameters.AddWithValue("diary", diary);
@@ -76,7 +85,7 @@ namespace MyDiary
             return notesNames;
         }
 
-        private List<string> getTagsNames(string username, string diary)
+        private List<string> GetTagsNames(string username, string diary)
         {
             List<string> tags = new List<string>();
             
@@ -85,7 +94,7 @@ namespace MyDiary
 
             connection.Open();
 
-            string sql = "SELECT tags.text FROM tags, notes, notes_tags, diaries, users WHERE users.username = @username AND diaries.name = @diary AND diaries.users_id = users.id AND notes.diaries_id = diaries.id AND notes_tags.notes_id = notes.id AND notes_tags.tags_id = tags.id";
+            string sql = "SELECT DISTINCT tags.text FROM tags, notes, notes_tags, diaries, users WHERE users.username LIKE @username AND diaries.name LIKE @diary AND diaries.users_id = users.id AND notes.diaries_id = diaries.id AND notes_tags.notes_id = notes.id AND notes_tags.tags_id = tags.id";
             MySqlCommand myCommand = new MySqlCommand(sql, connection);
             myCommand.Parameters.AddWithValue("username", username);
             myCommand.Parameters.AddWithValue("diary", diary);
@@ -98,7 +107,72 @@ namespace MyDiary
 
             connection.Close();
 
+            foreach (string tag in tags)
+                Console.WriteLine(tag);
+
             return tags;
+        }
+
+        private List<string> CheckMatchingNotes(string username, string diary, ref List<uint> noteIDs)
+        {
+            List<string> matchingNotes = new List<string>();
+            noteIDs = new List<uint>();
+            List<string> tagList = new List<string>();
+            for (int i = 0; i < _tagCheckBoxes.Count; i++)
+                if (_tagCheckBoxes[i].IsChecked ?? true)
+                    tagList.Add(_tagCheckBoxes[i].Content.ToString());
+                    
+            string myConnectionString = "server=127.0.0.1; uid=root; pwd=; database=diary";
+            MySqlConnection connection = new MySqlConnection(myConnectionString);
+
+            if (tagList.Count > 0)
+            {
+                foreach (uint note_id in _allNoteIDs)
+                {
+                    List<string> noteTags = new List<string>();
+                    uint id = 0;
+
+                    connection.Open();
+                    string sql = "SELECT notes.id, tags.text FROM tags, notes, notes_tags, diaries, users WHERE users.username LIKE @username AND diaries.name LIKE @diary AND notes.id LIKE @note_id AND diaries.users_id = users.id AND notes.diaries_id = diaries.id AND notes_tags.tags_id = tags.id AND notes_tags.notes_id = notes.id";
+
+                    MySqlCommand myCommand = new MySqlCommand(sql, connection);
+                    myCommand.Parameters.AddWithValue("username", username);
+                    myCommand.Parameters.AddWithValue("diary", diary);
+                    myCommand.Parameters.AddWithValue("note_id", note_id);
+
+                    MySqlDataReader reader = myCommand.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        id = reader.GetUInt32(0);
+                        noteTags.Add(reader.GetString(1));
+                    }
+                    connection.Close();
+
+                    bool matched = true;
+                    foreach (string tag in tagList)
+                        if (!noteTags.Contains(tag))
+                            matched = false;
+                    if (matched)
+                    {
+                        string note = "";
+                        for (int i = 0; i < _allNoteIDs.Count; i++)
+                            if (_allNoteIDs[i] == id)
+                            {
+                                note = _allNotes[i];
+                                break;
+                            }
+                        noteIDs.Add(id);
+                        matchingNotes.Add(note);
+                    }
+                }
+            }
+            else
+            {
+                noteIDs = _allNoteIDs;
+                matchingNotes = _allNotes;
+            }
+
+            return matchingNotes;
         }
 
         private void createNoteButton(string name)
@@ -111,10 +185,19 @@ namespace MyDiary
             notesStackPanel.Children.Add(button);
         }
 
+        private void removeAllNoteButtons()
+        {
+            notesStackPanel.Children.Clear();
+
+            _noteButtons.Clear();
+            _noteIDs.Clear();
+        }
+
         private void createTagCheckBox(string name)
         {
             CheckBox checkBox = new CheckBox();
             checkBox.Content = name;
+            checkBox.Click += tag_Click;
 
             _tagCheckBoxes.Add(checkBox);
             tagsStackpanel.Children.Add(checkBox);
@@ -141,6 +224,22 @@ namespace MyDiary
             }
 
             Close();
+        }
+
+        private void tag_Click(object sender, RoutedEventArgs e)
+        {
+            removeAllNoteButtons();
+
+            List<uint> ids = new List<uint>();
+            CheckMatchingNotes(Globals.username, Globals.openDiary, ref ids);
+            foreach (uint id in ids)
+                for (int i = 0; i < _allNoteIDs.Count; i++)
+                    if (_allNoteIDs[i] == id)
+                    {
+                        createNoteButton(_allNotes[i]);
+                        _noteIDs.Add(_allNoteIDs[i]);
+                        break;
+                    }
         }
     }
 }
